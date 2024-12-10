@@ -3,6 +3,8 @@ package model;
 import enums.*;
 import interfaces.Funcionario;
 import java.time.LocalDate;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 public class TecnicoADM extends Pessoa implements Funcionario {
     private Nivel nivelTecnico;
@@ -38,7 +40,9 @@ public class TecnicoADM extends Pessoa implements Funcionario {
         if (insalubridade) salarioFinal += salarioBase * 0.50;
         if (funcaoGratificada) salarioFinal += salarioBase * 0.50;
 
-        return salarioFinal;
+        // Arredonda para duas casas decimais
+        BigDecimal salarioArredondado = new BigDecimal(salarioFinal).setScale(2, RoundingMode.HALF_UP);
+        return salarioArredondado.doubleValue();
     }
 
     public Nivel getNivelTecnico() {
@@ -71,5 +75,15 @@ public class TecnicoADM extends Pessoa implements Funcionario {
 
     public void setFuncaoGratificada(Boolean funcaoGratificada) {
         this.funcaoGratificada = funcaoGratificada;
+    }
+
+    @Override
+    public String toString() {
+        return "Técnico {" +
+                "Nome: " + nome +
+                ", Matrícula: " + matricula +
+                ", Departamento: " + departamento +
+                ", Salário: " + salario +
+                "}";
     }
 }

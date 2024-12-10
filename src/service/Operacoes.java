@@ -52,7 +52,7 @@ public class Operacoes {
     }
 
     // Deleta professor a partir da matrícula
-    public static void deletarProfessor(int matricula) {
+    public static void deletarProfessor(long matricula) {
         Optional<Professor> professor = BancoDAO.getInstance().getArrayPessoa().stream()
                 .filter(p -> p instanceof Professor && ((Professor) p).getMatricula() == matricula)
                 .map(p -> (Professor) p)
@@ -67,7 +67,7 @@ public class Operacoes {
     }
 
     // Deleta técnico a partir da matrícula
-    public static void deletarTecnicoADM(int matricula) {
+    public static void deletarTecnicoADM(long matricula) {
         Optional<TecnicoADM> tecnico = BancoDAO.getInstance().getArrayPessoa().stream()
                 .filter(p -> p instanceof TecnicoADM && ((TecnicoADM) p).getMatricula() == matricula)
                 .map(p -> (TecnicoADM) p)
@@ -82,23 +82,27 @@ public class Operacoes {
     }
 
     // Busca professor a partir da matrícula
-    public static void buscarProfessor(int matricula) {
+    public static Professor buscarProfessor(long matricula) {
         Optional<Professor> professor = BancoDAO.getInstance().getArrayPessoa().stream()
                 .filter(p -> p instanceof Professor && ((Professor) p).getMatricula() == matricula)
                 .map(p -> (Professor) p)
                 .findFirst();
 
-        professor.ifPresentOrElse(System.out::println, () -> System.out.println("Professor não encontrado."));
+        professor.ifPresent(p -> p.setSalario(calcularSalario(p)));
+
+        return professor.orElse(null);
     }
 
     // Busca técnico ADM a partir da matrícula
-    public static void buscarTecnicoADM(int matricula) {
+    public static TecnicoADM buscarTecnicoADM(long matricula) {
         Optional<TecnicoADM> tecnico = BancoDAO.getInstance().getArrayPessoa().stream()
                 .filter(p -> p instanceof TecnicoADM && ((TecnicoADM) p).getMatricula() == matricula)
                 .map(p -> (TecnicoADM) p)
                 .findFirst();
 
-        tecnico.ifPresentOrElse(System.out::println, () -> System.out.println("Técnico Administrativo não encontrado."));
+        tecnico.ifPresent(p -> p.setSalario(calcularSalario(p)));
+
+        return tecnico.orElse(null);
     }
 
     // Calcula o salário de um professor ou técnico

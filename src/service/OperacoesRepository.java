@@ -15,7 +15,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class OperacoesRepository {
+    private static final Set<String> cpfsCadastrados = new HashSet<>();
+    private static final Set<Integer> matriculasCadastradas = new HashSet<>();
+
     public static void cadastrarProfessor(Scanner scanner) {
         try {
             System.out.print("Nome do Professor: ");
@@ -47,8 +53,8 @@ public class OperacoesRepository {
 
             Endereco endereco = new Endereco(rua, numero, bairro, cidade, cep);
 
-            System.out.print("Matrícula: ");
-            long matricula = Long.parseLong(scanner.nextLine().trim());
+            System.out.print("Matrícula (somente números): ");
+            long matricula = lerMatricula(scanner);
 
             System.out.print("Departamento: ");
             String departamento = scanner.nextLine().trim();
@@ -59,8 +65,8 @@ public class OperacoesRepository {
             System.out.print("Data de Ingresso (AAAA-MM-DD): ");
             LocalDate dataIngresso = lerData(scanner);
 
-            System.out.print("Nível (0 - Júnior, 1 - Pleno, 2 - Sênior): ");
-            Nivel nivelProfessor = lerNivel(scanner);
+            System.out.print("Nível (I, II, III, IV, V, VI, VII, VIII): ");
+            Nivel nivelProfessor = Nivel.fromString(scanner.nextLine());
 
             System.out.print("Formação (0 - Especialização, 1 - Mestrado, 2 - Doutorado): ");
             Formacao formacaoProfessor = lerFormacao(scanner);
@@ -89,10 +95,36 @@ public class OperacoesRepository {
 
     private static String lerCPF(Scanner scanner) {
         String cpf = scanner.nextLine().trim();
-        if (cpf.length() != 11 || cpf.contains("e")) {
-            throw new IllegalArgumentException("CPF inválido.");
+
+        if (cpf.length() != 11 || !cpf.matches("\\d+")) {
+            throw new IllegalArgumentException("CPF inválido. Deve conter exatamente 11 dígitos numéricos.");
         }
+
+        if (cpfsCadastrados.contains(cpf)) {
+            throw new IllegalArgumentException("CPF já cadastrado.");
+        }
+
+        cpfsCadastrados.add(cpf);
+
         return cpf;
+    }
+
+    private static long lerMatricula(Scanner scanner) {
+        int matricula;
+
+        try {
+            matricula = Integer.parseInt(scanner.nextLine().trim());
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Matrícula inválida. Deve conter apenas números.");
+        }
+
+        if (matriculasCadastradas.contains(matricula)) {
+            throw new IllegalArgumentException("Matrícula já cadastrada.");
+        }
+
+        matriculasCadastradas.add(matricula);
+
+        return matricula;
     }
 
     private static LocalDate lerData(Scanner scanner) {
@@ -106,11 +138,6 @@ public class OperacoesRepository {
     private static Genero lerGenero(Scanner scanner) {
         int generoIndex = Integer.parseInt(scanner.nextLine().trim());
         return Genero.values()[generoIndex];
-    }
-
-    private static Nivel lerNivel(Scanner scanner) {
-        int nivelIndex = Integer.parseInt(scanner.nextLine().trim());
-        return Nivel.values()[nivelIndex];
     }
 
     private static Formacao lerFormacao(Scanner scanner) {
@@ -149,8 +176,8 @@ public class OperacoesRepository {
 
             Endereco endereco = new Endereco(rua, numero, bairro, cidade, cep);
 
-            System.out.print("Matrícula: ");
-            Long matricula = Long.parseLong(scanner.nextLine().trim());
+            System.out.print("Matrícula (somente números): ");
+            long matricula = lerMatricula(scanner);
 
             System.out.print("Departamento: ");
             String departamento = scanner.nextLine().trim();
@@ -161,16 +188,16 @@ public class OperacoesRepository {
             System.out.print("Data de Ingresso (AAAA-MM-DD): ");
             LocalDate dataIngresso = lerData(scanner);
 
-            System.out.print("Nível (0 - Júnior, 1 - Pleno, 2 - Sênior): ");
-            Nivel nivelTecnico = Nivel.values()[Integer.parseInt(scanner.nextLine().trim())];
+            System.out.print("Nível (I, II, III, IV, V, VI, VII, VIII): ");
+            Nivel nivelTecnico = Nivel.fromString(scanner.nextLine());
 
             System.out.print("Formação (0 - Especialização, 1 - Mestrado, 2 - Doutorado): ");
             Formacao formacaoTecnico = Formacao.values()[Integer.parseInt(scanner.nextLine().trim())];
 
-            System.out.print("Recebe Insalubridade? (true/false): ");
+            System.out.print("Recebe Insalubridade? (Sim/Não): ");
             Boolean insalubridade = Boolean.parseBoolean(scanner.nextLine().trim());
 
-            System.out.print("Possui Função Gratificada? (true/false): ");
+            System.out.print("Possui Função Gratificada? (Sim/Não): ");
             Boolean funcaoGratificada = Boolean.parseBoolean(scanner.nextLine().trim());
 
             TecnicoADM tecnicoADM = new TecnicoADM(
@@ -180,19 +207,24 @@ public class OperacoesRepository {
             );
 
             Operacoes.cadastrarTecnicoADM(tecnicoADM);
-            System.out.println("Técnico Administrativo cadastrado com sucesso!");
-
         } catch (Exception e) {
             System.out.println("Erro ao cadastrar Técnico ADM: " + e.getMessage());
         }
     }
 
-
     public static void buscarProfessor(Scanner scanner) {
         try {
             System.out.print("Matrícula do Professor para buscar: ");
-            int matricula = Integer.parseInt(scanner.nextLine().trim());
-            Operacoes.buscarProfessor(matricula);
+            long matricula = Integer.parseInt(scanner.nextLine().trim());
+            Professor professor = Operacoes.buscarProfessor(matricula);
+
+            if (professor != null) {
+                System.out.println(professor);
+            } else {
+                System.out.println("Professor não encontrado.");
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Matrícula inválida. Por favor, insira um número.");
         } catch (Exception e) {
             System.out.println("Erro ao buscar professor: " + e.getMessage());
         }
@@ -200,18 +232,26 @@ public class OperacoesRepository {
 
     public static void buscarTecnicoADM(Scanner scanner) {
         try {
-            System.out.print("Matrícula do Técnico ADM para buscar: ");
-            int matricula = Integer.parseInt(scanner.nextLine().trim());
-            Operacoes.buscarTecnicoADM(matricula);
+            System.out.print("Matrícula do Técnico para buscar: ");
+            long matricula = Integer.parseInt(scanner.nextLine().trim());
+            TecnicoADM tecnicoADM = Operacoes.buscarTecnicoADM(matricula);
+
+            if (tecnicoADM != null) {
+                System.out.println(tecnicoADM);
+            } else {
+                System.out.println("Técnico não encontrado.");
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Matrícula inválida. Por favor, insira um número.");
         } catch (Exception e) {
-            System.out.println("Erro ao buscar técnico ADM: " + e.getMessage());
+            System.out.println("Erro ao buscar professor: " + e.getMessage());
         }
     }
 
     public static void deletarProfessor(Scanner scanner) {
         try {
             System.out.print("Matrícula do Professor para deletar: ");
-            int matricula = Integer.parseInt(scanner.nextLine().trim());
+            long matricula = Integer.parseInt(scanner.nextLine().trim());
             Operacoes.deletarProfessor(matricula);
         } catch (Exception e) {
             System.out.println("Erro ao deletar professor: " + e.getMessage());
@@ -221,7 +261,7 @@ public class OperacoesRepository {
     public static void deletarTecnicoADM(Scanner scanner) {
         try {
             System.out.print("Matrícula do Técnico ADM para deletar: ");
-            int matricula = Integer.parseInt(scanner.nextLine().trim());
+            long matricula = Integer.parseInt(scanner.nextLine().trim());
             Operacoes.deletarTecnicoADM(matricula);
         } catch (Exception e) {
             System.out.println("Erro ao deletar técnico ADM: " + e.getMessage());
@@ -231,7 +271,7 @@ public class OperacoesRepository {
     public static void calcularSalario(Scanner scanner) {
         try {
             System.out.print("Matrícula do funcionário para calcular salário: ");
-            int matricula = Integer.parseInt(scanner.nextLine().trim());
+            long matricula = Integer.parseInt(scanner.nextLine().trim());
             Pessoa funcionario = BancoDAO.getInstance().getArrayPessoa().stream()
                     .filter(p -> p.getMatricula() == matricula)
                     .findFirst()
@@ -245,23 +285,6 @@ public class OperacoesRepository {
             }
         } catch (Exception e) {
             System.out.println("Erro ao calcular salário: " + e.getMessage());
-        }
-    }
-
-    public static void SalvarDados(BancoDAO bancoDAO) {
-        try {
-            BancoDAO.salvarNoArquivo();
-            System.out.println("Dados salvos com sucesso!");
-        } catch (Exception e) {
-            System.out.println("Ocorreu um erro inesperado: " + e.getMessage());
-        }
-    }
-
-    public static void CarregarDados(BancoDAO bancoDAO) {
-        try {
-            BancoDAO.lerDoArquivo();
-        } catch (Exception e) {
-            System.out.println("Erro ao carregar dados: " + e.getMessage());
         }
     }
 }

@@ -1,8 +1,11 @@
 package model;
+
 import enums.*;
 import interfaces.Funcionario;
 import java.time.LocalDate;
 import java.util.List;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 public class Professor extends Pessoa implements Funcionario {
     private Nivel nivelProfessor;
@@ -23,7 +26,7 @@ public class Professor extends Pessoa implements Funcionario {
         double salarioBase = 4000;
         double salarioFinal = salarioBase;
 
-        // Acrescenta 5% por nível
+       // Acrescenta 5% por nível
         salarioFinal *= Math.pow(1.05, nivelProfessor.ordinal());
 
         // Acrescenta de acordo com a formação
@@ -33,7 +36,9 @@ public class Professor extends Pessoa implements Funcionario {
             case DOUTORADO -> salarioFinal += salarioBase * 0.75;
         }
 
-        return salarioFinal;
+        // Arredonda para duas casas decimais
+        BigDecimal salarioArredondado = new BigDecimal(salarioFinal).setScale(2, RoundingMode.HALF_UP);
+        return salarioArredondado.doubleValue();
     }
 
     public Nivel getNivelProfessor() {
@@ -59,4 +64,15 @@ public class Professor extends Pessoa implements Funcionario {
     public void setDisciplinas(List<String> disciplinas) {
         this.disciplinas = disciplinas;
     }
+
+    @Override
+    public String toString() {
+        return "Professor {" +
+                "Nome: " + nome +
+                ", Matrícula: " + matricula +
+                ", Departamento: " + departamento +
+                ", Salário: " + salario +
+                "}";
+    }
+
 }
