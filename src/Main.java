@@ -5,7 +5,6 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        BancoDAO bancoDAO = BancoDAO.getInstance();
         Scanner scanner = new Scanner(System.in);
         int opcao = 0;
 

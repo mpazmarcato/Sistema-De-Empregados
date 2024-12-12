@@ -39,10 +39,23 @@ Este é um sistema de gerenciamento de empregados da empresa IMDCorp, desenvolvi
 
 1. **Clone o repositório**:
    ```bash
-   git clone https://github.com/usuario/projeto-imdcorp.git
+   git clone https://github.com/mpazmarcato/Sistema-De-Empregados.git
    ```
 2. **Compile e execute o arquivo principal**:
    ```bash
+    cd src/
     javac Main.java
     java Main
    ```
+   
+## Teste
+
+Recomenda-se testar com matrículas entre 10000 - 10010 e 20000 - 20010 em ambos casos (guia).
+
+
+### ATENÇÃO
+
+Para salvar os dados no arquivo é obrigátoria sua saída pela **opção 0**.
+
+### Observações
+Não listei informações sensíveis dos funcionários por questões de segurança.

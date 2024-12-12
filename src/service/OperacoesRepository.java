@@ -195,10 +195,10 @@ public class OperacoesRepository {
             Formacao formacaoTecnico = Formacao.values()[Integer.parseInt(scanner.nextLine().trim())];
 
             System.out.print("Recebe Insalubridade? (Sim/Não): ");
-            Boolean insalubridade = Boolean.parseBoolean(scanner.nextLine().trim());
+            Boolean insalubridade = scanner.nextLine().trim().equalsIgnoreCase("Sim");
 
             System.out.print("Possui Função Gratificada? (Sim/Não): ");
-            Boolean funcaoGratificada = Boolean.parseBoolean(scanner.nextLine().trim());
+            Boolean funcaoGratificada = scanner.nextLine().trim().equalsIgnoreCase("Sim");
 
             TecnicoADM tecnicoADM = new TecnicoADM(
                     nome, cpf, dataNascimento, genero, endereco, matricula,
