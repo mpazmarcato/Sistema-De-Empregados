@@ -67,12 +67,20 @@ public class Professor extends Pessoa implements Funcionario {
 
     @Override
     public String toString() {
-        return "Professor {" +
-                "Nome: " + nome +
-                ", Matrícula: " + matricula +
-                ", Departamento: " + departamento +
-                ", Salário: " + salario +
+        return "Professor {\n" +
+                "    Nome: " + nome + ",\n" +
+                "    CPF: " + cpf + ",\n" +
+                "    Data de Nascimento: " + dataNascimento + ",\n" +
+                "    Gênero: " + genero + ",\n" +
+                "    Endereço: " + endereco + ",\n" +
+                "    Matrícula: " + matricula + ",\n" +
+                "    Departamento: " + departamento + ",\n" +
+                "    Carga Horária: " + cargaHoraria + ",\n" +
+                "    Data de Ingresso: " + dataCadastro + ",\n" +
+                "    Nível Professor: " + nivelProfessor + ",\n" +
+                "    Formação: " + formacaoProfessor + ",\n" +
+                "    Disciplinas: " + disciplinas + ",\n" +
+                "    Salário: R$" + calculaSalario() + "\n" +
                 "}";
     }
-
 }

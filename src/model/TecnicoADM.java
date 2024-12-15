@@ -79,11 +79,21 @@ public class TecnicoADM extends Pessoa implements Funcionario {
 
     @Override
     public String toString() {
-        return "Técnico {" +
-                "Nome: " + nome +
-                ", Matrícula: " + matricula +
-                ", Departamento: " + departamento +
-                ", Salário: " + salario +
+        return "Técnico {\n" +
+                "    Nome: " + nome + ",\n" +
+                "    CPF: " + cpf + ",\n" +
+                "    Data de Nascimento: " + dataNascimento + ",\n" +
+                "    Gênero: " + genero + ",\n" +
+                "    Endereço: " + endereco + ",\n" +
+                "    Matrícula: " + matricula + ",\n" +
+                "    Departamento: " + departamento + ",\n" +
+                "    Carga Horária: " + cargaHoraria + ",\n" +
+                "    Data de Ingresso: " + dataCadastro + ",\n" +
+                "    Nível Técnico: " + nivelTecnico + ",\n" +
+                "    Formação: " + formacaoTecnico + ",\n" +
+                "    Insalubridade: " + (insalubridade ? "Sim" : "Não") + ",\n" +
+                "    Função Gratificada: " + (funcaoGratificada ? "Sim" : "Não") + ",\n" +
+                "    Salário: " + calculaSalario() + "\n" +
                 "}";
     }
 }
