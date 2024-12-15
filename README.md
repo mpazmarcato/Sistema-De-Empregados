@@ -50,8 +50,7 @@ Este é um sistema de gerenciamento de empregados da empresa IMDCorp, desenvolvi
    
 ## Teste
 
-Recomenda-se testar com matrículas entre 10000 - 10010 e 20000 - 20010 em ambos casos (guia).
-
+Recomenda-se testar com matrículas entre 10000 - 10010 (professores) e 20000 - 20010 (técnicos).
 
 ### ATENÇÃO
 
