@@ -58,3 +58,4 @@ Para salvar os dados no arquivo é obrigátoria sua saída pela **opção 0**.
 
 ### Observações
 Não listei informações sensíveis dos funcionários por questões de segurança.
+Aparece que a instancia nunca foi utilizada mas ela foi utilizada.
